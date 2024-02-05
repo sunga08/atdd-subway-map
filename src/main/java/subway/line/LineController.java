@@ -2,6 +2,9 @@ package subway.line;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.section.SectionRequest;
+import subway.section.SectionResponse;
+import subway.section.SectionService;
 
 import java.net.URI;
 import java.util.List;
@@ -9,8 +12,12 @@ import java.util.List;
 @RestController
 public class LineController {
     private LineService lineService;
+    private SectionService sectionService;
 
-    public LineController(LineService lineService) {this.lineService = lineService;}
+    public LineController(LineService lineService, SectionService sectionService) {
+        this.lineService = lineService;
+        this.sectionService = sectionService;
+    }
 
     @PostMapping("/lines")
     public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest lineRequest) {
@@ -43,4 +50,10 @@ public class LineController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/lines/{id}/sections")
+    public ResponseEntity<SectionResponse> addSection(@PathVariable Long id,
+                                                      @RequestBody SectionRequest sectionRequest) {
+        sectionService.addSection(id, sectionRequest);
+        return ResponseEntity.created(URI.create("/")).build();
+    }
 }

@@ -26,8 +26,8 @@ public class LineService {
         stations.add(stationRepository.findById(lineRequest.getUpStationId()).orElseThrow());
         stations.add(stationRepository.findById(lineRequest.getDownStationId()).orElseThrow());
 
-        Line line = lineRepository.save(lineRequest.createLine());
-        return createLineResponse(line, stations);
+        Line line = lineRepository.save(lineRequest.createLine(stations));
+        return createLineResponse(line);
     }
 
     public List<LineResponse> findAllLines() {
@@ -35,11 +35,11 @@ public class LineService {
 
         List<Line> lines = lineRepository.findAll();
         for(Line line : lines) {
-            List<Station> stations = new ArrayList<>();
+            /*List<Station> stations = new ArrayList<>();
             stations.add(stationRepository.findById(line.getUpStationId()).orElseThrow());
-            stations.add(stationRepository.findById(line.getDownStationId()).orElseThrow());
+            stations.add(stationRepository.findById(line.getDownStationId()).orElseThrow());*/
 
-            lineResponses.add(createLineResponse(line, stations));
+            lineResponses.add(createLineResponse(line, line.getStations()));
         }
 
         return lineResponses;
@@ -48,11 +48,11 @@ public class LineService {
     public LineResponse findLine(Long id) {
         Line line = lineRepository.findById(id).orElseThrow();
 
-        List<Station> stations = new ArrayList<>();
+        /*List<Station> stations = new ArrayList<>();
         stations.add(stationRepository.findById(line.getUpStationId()).orElseThrow());
-        stations.add(stationRepository.findById(line.getDownStationId()).orElseThrow());
+        stations.add(stationRepository.findById(line.getDownStationId()).orElseThrow());*/
 
-        return createLineResponse(line, stations);
+        return createLineResponse(line, line.getStations());
     }
 
     @Transactional
@@ -72,6 +72,14 @@ public class LineService {
             stationResponses.add(new StationResponse(station));
         }
 
+        return new LineResponse(line, stationResponses);
+    }
+
+    private LineResponse createLineResponse(Line line) {
+        List<StationResponse> stationResponses = new ArrayList<>();
+        for(Station station : line.getStations()) {
+            stationResponses.add(new StationResponse(station));
+        }
         return new LineResponse(line, stationResponses);
     }
 }

@@ -1,5 +1,9 @@
 package subway.line;
 
+import subway.station.Station;
+
+import java.util.List;
+
 public class LineRequest {
     private String name;
     private String color;
@@ -27,7 +31,7 @@ public class LineRequest {
         return distance;
     }
 
-    public Line createLine() {
-        return new Line(name, color, upStationId, downStationId, distance);
+    public Line createLine(List<Station> stations) {
+        return new Line(name, color, upStationId, downStationId, distance, stations);
     }
 }

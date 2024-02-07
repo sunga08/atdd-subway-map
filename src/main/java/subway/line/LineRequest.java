@@ -31,7 +31,7 @@ public class LineRequest {
         return distance;
     }
 
-    public Line createLine(List<Station> stations) {
-        return new Line(name, color, upStationId, downStationId, distance, stations);
+    public Line createLine() {
+        return new Line(name, color, upStationId, downStationId, distance);
     }
 }

@@ -25,6 +25,11 @@ public class Station {
         this.name = name;
     }
 
+    public Station(String name, Line line) {
+        this.name = name;
+        this.line = line;
+    }
+
     public Long getId() {
         return id;
     }
@@ -35,5 +40,9 @@ public class Station {
 
     public Line getLine() {
         return line;
+    }
+
+    public void setLine(Line line) {
+        this.line = line;
     }
 }

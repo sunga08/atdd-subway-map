@@ -22,11 +22,21 @@ public class LineService {
 
     @Transactional
     public LineResponse saveLine(LineRequest lineRequest) {
-        List<Station> stations = new ArrayList<>();
-        stations.add(stationRepository.findById(lineRequest.getUpStationId()).orElseThrow());
-        stations.add(stationRepository.findById(lineRequest.getDownStationId()).orElseThrow());
+//        List<Station> stations = new ArrayList<>();
+//        stations.add(stationRepository.findById(lineRequest.getUpStationId()).orElseThrow());
+//        stations.add(stationRepository.findById(lineRequest.getDownStationId()).orElseThrow());
 
-        Line line = lineRepository.save(lineRequest.createLine(stations));
+        Station station1 = stationRepository.findById(lineRequest.getUpStationId()).orElseThrow();
+        Station station2 = stationRepository.findById(lineRequest.getDownStationId()).orElseThrow();
+
+        //Line line = lineRepository.save(lineRequest.createLine(stations));
+        Line line = lineRequest.createLine();
+        line.getStations().add(station1);
+        station1.setLine(line);
+        line.getStations().add(station2);
+        station2.setLine(line);
+        line = lineRepository.save(line);
+
         return createLineResponse(line);
     }
 
